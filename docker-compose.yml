@@ -163,6 +163,72 @@ services:
       retries: 5
       start_period: 10s
 
+  delivery-service:
+    build: ./services/delivery-service
+    container_name: delivery-service
+    restart: unless-stopped
+    ports:
+      - "5006:5006"
+    environment:
+      - PORT=5006
+      - MONGO_URI=mongodb://mongodb:27017/delivery_db
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - food-delivery-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5006/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  notification-service:
+    build: ./services/notification-service
+    container_name: notification-service
+    restart: unless-stopped
+    ports:
+      - "5007:5007"
+    environment:
+      - PORT=5007
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - food-delivery-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5007/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  review-service:
+    build: ./services/review-service
+    container_name: review-service
+    restart: unless-stopped
+    ports:
+      - "5008:5008"
+    environment:
+      - PORT=5008
+      - MONGO_URI=mongodb://mongodb:27017/review_db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - food-delivery-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5008/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway
@@ -201,6 +267,12 @@ services:
       order-service:
         condition: service_healthy
       payment-service:
+        condition: service_healthy
+      delivery-service:
+        condition: service_healthy
+      notification-service:
+        condition: service_healthy
+      review-service:
         condition: service_healthy
     networks:
       - food-delivery-net

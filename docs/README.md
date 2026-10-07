@@ -20,7 +20,9 @@
 | 🚀 [`phase_0_plan.md`](phase_0_plan.md) | **Phase 0 Execution Plan:** Step-by-step foundation plan (Docker bridge network, MongoDB, RabbitMQ, Redis, and API Gateway). |
 | 🔑 [`phase_1_plan.md`](phase_1_plan.md) | **Phase 1 Execution Plan:** Identity & Catalog services (Auth Service, User Service, Restaurant Service + Redis Cache). |
 | 💳 [`phase_2_plan.md`](phase_2_plan.md) | **Phase 2 Execution Plan:** Core Transaction Engine (Order Service & Payment Service via RabbitMQ Saga Choreography). |
+| 🛵 [`phase_3_plan.md`](phase_3_plan.md) | **Phase 3 Execution Plan:** Fulfillment & Auxiliary Services (Delivery Service, Notification Service, Review Service). |
 | 🖼️ [`food_delivery_architecture_diagram.png`](food_delivery_architecture_diagram.png) | **High-Resolution Architecture Diagram:** Publication-ready 2x PNG for Word reports and presentation slide decks. |
+
 
 
 | 📐 [`food_delivery_architecture_diagram.svg`](food_delivery_architecture_diagram.svg) | **Scalable Vector Graphic (SVG):** Infinitely scalable vector diagram. |
