@@ -112,6 +112,8 @@ const handleHealthCheck = async (req, res) => {
     auth: getHostAndPort(ROUTES['/api/auth'], 'auth-service', 5001),
     user: getHostAndPort(ROUTES['/api/users'], 'user-service', 5002),
     restaurant: getHostAndPort(ROUTES['/api/restaurants'], 'restaurant-service', 5003),
+    order: getHostAndPort(ROUTES['/api/orders'], 'order-service', 5004),
+    payment: getHostAndPort(ROUTES['/api/payments'], 'payment-service', 5005),
   };
 
   await Promise.all(
