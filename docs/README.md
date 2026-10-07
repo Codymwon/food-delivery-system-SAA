@@ -18,6 +18,10 @@
 | 📘 [`food_delivery_architecture_plan.md`](food_delivery_architecture_plan.md) | **Master Architecture Blueprint:** Details Database-per-Service, traffic separation, Eventual Consistency, viva defense strategies, and scaling matrices. |
 | 🗺️ [`implementation_roadmap.md`](implementation_roadmap.md) | **Phased Implementation Roadmap:** Sequential 7-phase plan from Phase 0 (Infrastructure) to Phase 5 (Client UI) and Phase 6 (Review deliverables). |
 | 🚀 [`phase_0_plan.md`](phase_0_plan.md) | **Phase 0 Execution Plan:** Step-by-step foundation plan (Docker bridge network, MongoDB, RabbitMQ, Redis, and API Gateway). |
+| 🔑 [`phase_1_plan.md`](phase_1_plan.md) | **Phase 1 Execution Plan:** Identity & Catalog services (Auth Service, User Service, Restaurant Service + Redis Cache). |
+| 💳 [`phase_2_plan.md`](phase_2_plan.md) | **Phase 2 Execution Plan:** Core Transaction Engine (Order Service & Payment Service via RabbitMQ Saga Choreography). |
 | 🖼️ [`food_delivery_architecture_diagram.png`](food_delivery_architecture_diagram.png) | **High-Resolution Architecture Diagram:** Publication-ready 2x PNG for Word reports and presentation slide decks. |
+
+
 | 📐 [`food_delivery_architecture_diagram.svg`](food_delivery_architecture_diagram.svg) | **Scalable Vector Graphic (SVG):** Infinitely scalable vector diagram. |
 | 🌐 [`food_delivery_architecture_diagram.html`](food_delivery_architecture_diagram.html) | **Interactive Editorial HTML Diagram:** Standalone webpage featuring defense cards, typography, and live-ready design tokens. |

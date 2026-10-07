@@ -1,3 +1,5 @@
+name: food-delivery-system
+
 services:
   mongodb:
     image: mongo:7-jammy
@@ -46,6 +48,73 @@ services:
       timeout: 3s
       retries: 5
 
+  auth-service:
+    build: ./services/auth-service
+    container_name: auth-service
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - MONGO_URI=mongodb://mongodb:27017/user_db
+      - JWT_SECRET=vit_swe4007_secret_key_2026
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - food-delivery-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  user-service:
+    build: ./services/user-service
+    container_name: user-service
+    restart: unless-stopped
+    ports:
+      - "5002:5002"
+    environment:
+      - PORT=5002
+      - MONGO_URI=mongodb://mongodb:27017/user_db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - food-delivery-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  restaurant-service:
+    build: ./services/restaurant-service
+    container_name: restaurant-service
+    restart: unless-stopped
+    ports:
+      - "5003:5003"
+    environment:
+      - PORT=5003
+      - MONGO_URI=mongodb://mongodb:27017/restaurant_db
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - food-delivery-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5003/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway
@@ -69,11 +138,26 @@ services:
       NOTIFICATION_SERVICE_URL: http://notification-service:5007
       REVIEW_SERVICE_URL: http://review-service:5008
     depends_on:
-      - mongodb
-      - rabbitmq
-      - redis
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+      restaurant-service:
+        condition: service_healthy
     networks:
       - food-delivery-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 networks:
   food-delivery-net:

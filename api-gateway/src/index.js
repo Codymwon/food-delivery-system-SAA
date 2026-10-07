@@ -98,6 +98,29 @@ const handleHealthCheck = async (req, res) => {
     checkTcpConnection(INFRA_CONFIG.redis.host, INFRA_CONFIG.redis.port),
   ]);
 
+  const getHostAndPort = (urlStr, defaultHost, defaultPort) => {
+    try {
+      const u = new URL(urlStr);
+      return { host: u.hostname, port: parseInt(u.port || defaultPort, 10) };
+    } catch {
+      return { host: defaultHost, port: defaultPort };
+    }
+  };
+
+  const serviceChecks = {};
+  const activeServices = {
+    auth: getHostAndPort(ROUTES['/api/auth'], 'auth-service', 5001),
+    user: getHostAndPort(ROUTES['/api/users'], 'user-service', 5002),
+    restaurant: getHostAndPort(ROUTES['/api/restaurants'], 'restaurant-service', 5003),
+  };
+
+  await Promise.all(
+    Object.entries(activeServices).map(async ([name, target]) => {
+      const conn = await checkTcpConnection(target.host, target.port, 1500);
+      serviceChecks[name] = conn === 'CONNECTED' ? 'UP' : 'DOWN';
+    })
+  );
+
   const payload = {
     gateway: 'UP',
     status: 'UP',
@@ -108,6 +131,7 @@ const handleHealthCheck = async (req, res) => {
       rabbitmq: rabbitmqStatus,
       redis: redisStatus,
     },
+    services: serviceChecks,
     routes: ROUTES,
   };
 
