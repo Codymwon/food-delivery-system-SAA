@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1240 850" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Background Dot Pattern -->
+          <pattern id="grid-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1" fill="#cbd5e1" opacity="0.45"/>
+          </pattern>
+          
+          <!-- Arrow Markers -->
+          <marker id="arr-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+          </marker>
+          <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#2563eb"/>
+          </marker>
+          <marker id="arr-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#7c3aed"/>
+          </marker>
+          <marker id="arr-coral" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#ea580c"/>
+          </marker>
+          <marker id="arr-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#059669"/>
+          </marker>
+        </defs>
+
+        <!-- Canvas Background -->
+        <rect width="100%" height="100%" fill="#ffffff" rx="10"/>
+        <rect width="100%" height="100%" fill="url(#grid-dots)"/>
+
+        <!-- ========================================================================= -->
+        <!-- ZONE 1: CLIENT APPLICATIONS (TOP TIER) -->
+        <!-- ========================================================================= -->
+        <rect x="30" y="25" width="1180" height="80" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+        <rect x="50" y="19" width="155" height="15" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8"/>
+        <text x="127" y="30" fill="#64748b" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle" letter-spacing="0.12em">1. CLIENT APPLICATIONS</text>
+
+        <!-- Single Customer Client App -->
+        <g id="app-customer">
+          <rect x="430" y="42" width="380" height="52" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"/>
+          <circle cx="452" cy="68" r="5" fill="#2563eb"/>
+          <text x="470" y="62" fill="#0f172a" font-size="13" font-family="'Geist', sans-serif" font-weight="700">Customer Web Application (React.js SPA)</text>
+          <text x="470" y="79" fill="#2563eb" font-size="9.5" font-family="'Geist Mono', monospace">Port :3000 · Menu Browsing · Cart · Checkout · Real-time Tracking</text>
+        </g>
+
+        <!-- ========================================================================= -->
+        <!-- ZONE 2: INGRESS & LOAD BALANCING (NORTH-SOUTH) -->
+        <!-- ========================================================================= -->
+        <!-- Connecting Line from Clients to LB -->
+        <path d="M 620,94 V 138" fill="none" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+        <rect x="580" y="113" width="80" height="14" rx="2" fill="#ffffff" stroke="#e2e8f0" stroke-width="0.8"/>
+        <text x="620" y="123" fill="#2563eb" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle">HTTPS / REST</text>
+
+        <!-- Load Balancer Node -->
+        <g id="node-lb">
+          <rect x="495" y="138" width="250" height="44" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+          <rect x="507" y="148" width="24" height="24" rx="4" fill="#16a34a"/>
+          <text x="519" y="164" fill="#ffffff" font-size="10" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">LB</text>
+          <text x="540" y="157" fill="#0f172a" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Load Balancer (Nginx / HAProxy)</text>
+          <text x="540" y="171" fill="#15803d" font-size="8.5" font-family="'Geist Mono', monospace">High Availability · Round-Robin Ingress</text>
+        </g>
+
+        <!-- Connector LB to API Gateway -->
+        <line x1="620" y1="182" x2="620" y2="204" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+
+        <!-- API Gateway Node -->
+        <g id="node-apigw">
+          <rect x="450" y="206" width="340" height="52" rx="7" fill="#eff6ff" stroke="#2563eb" stroke-width="1.8"/>
+          <rect x="465" y="218" width="28" height="28" rx="4" fill="#2563eb"/>
+          <text x="479" y="236" fill="#ffffff" font-size="11" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">GW</text>
+          <text x="505" y="227" fill="#0f172a" font-size="13" font-family="'Geist', sans-serif" font-weight="700">API Gateway (Port 5000)</text>
+          <text x="505" y="243" fill="#1d4ed8" font-size="9" font-family="'Geist Mono', monospace">Path Rewriter · JWT Auth Guard · CORS Termination</text>
+        </g>
+
+        <!-- ========================================================================= -->
+        <!-- ZONE 3: DOCKER CONTAINER NETWORK (INTERNAL BRIDGE) -->
+        <!-- ========================================================================= -->
+        <rect x="30" y="290" width="1180" height="305" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="6,4"/>
+        <rect x="50" y="282" width="290" height="16" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8"/>
+        <text x="195" y="294" fill="#475569" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle" letter-spacing="0.1em">3. DOCKER NETWORK (food-delivery-net)</text>
+
+        <!-- FAN-OUT CONNECTORS FROM API GATEWAY TO 8 MICROSERVICES -->
+        <!-- Auth: x=125, y=345 -->
+        <path d="M 470,258 V 315 H 125 V 345" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#arr-blue)"/>
+        <!-- User: x=260, y=345 -->
+        <path d="M 515,258 V 318 H 260 V 345" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#arr-blue)"/>
+        <!-- Restaurant: x=405, y=345 -->
+        <path d="M 560,258 V 322 H 405 V 345" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#arr-blue)"/>
+        <!-- Order: x=555, y=345 -->
+        <path d="M 600,258 V 345" fill="none" stroke="#ea580c" stroke-width="1.4" marker-end="url(#arr-coral)"/>
+        <!-- Payment: x=705, y=345 -->
+        <path d="M 640,258 V 322 H 705 V 345" fill="none" stroke="#ea580c" stroke-width="1.4" marker-end="url(#arr-coral)"/>
+        <!-- Delivery: x=855, y=345 -->
+        <path d="M 685,258 V 318 H 855 V 345" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#arr-blue)"/>
+        <!-- Review: x=995, y=345 -->
+        <path d="M 730,258 V 315 H 995 V 345" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#arr-blue)"/>
+        <!-- Notification: x=1125, y=345 -->
+        <path d="M 770,258 V 312 H 1125 V 345" fill="none" stroke="#2563eb" stroke-width="1.2" marker-end="url(#arr-blue)"/>
+
+        <!-- 1. AUTH SERVICE -->
+        <g id="svc-auth">
+          <rect x="55" y="345" width="140" height="58" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="68" y="364" fill="#0f172a" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Auth Service</text>
+          <text x="68" y="377" fill="#64748b" font-size="8.5" font-family="'Geist Mono', monospace">Port :5001 · JWT</text>
+          <text x="68" y="392" fill="#2563eb" font-size="8" font-family="'Geist Mono', monospace">Singleton</text>
+        </g>
+
+        <!-- 2. USER SERVICE -->
+        <g id="svc-user">
+          <rect x="205" y="345" width="130" height="58" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="218" y="364" fill="#0f172a" font-size="11" font-family="'Geist', sans-serif" font-weight="600">User Service</text>
+          <text x="218" y="377" fill="#64748b" font-size="8.5" font-family="'Geist Mono', monospace">Port :5002 · Profiles</text>
+          <text x="218" y="392" fill="#2563eb" font-size="8" font-family="'Geist Mono', monospace">Singleton</text>
+        </g>
+
+        <!-- 3. RESTAURANT SERVICE (2 REPLICAS) -->
+        <g id="svc-restaurant">
+          <rect x="345" y="342" width="145" height="66" rx="6" fill="#f8fafc" stroke="#3b82f6" stroke-width="1.2"/>
+          <text x="355" y="357" fill="#1e40af" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">SCALED (2 Replicas)</text>
+          <text x="355" y="373" fill="#0f172a" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Restaurant Svc</text>
+          <text x="355" y="386" fill="#64748b" font-size="8.5" font-family="'Geist Mono', monospace">Port :5003 · Catalogs</text>
+          <text x="355" y="399" fill="#2563eb" font-size="8" font-family="'Geist Mono', monospace">Replica 1 &amp; 2 (RR)</text>
+        </g>
+
+        <!-- 4. ORDER SERVICE (2 REPLICAS - FOCAL NODE) -->
+        <g id="svc-order">
+          <rect x="500" y="342" width="145" height="66" rx="6" fill="#fff7ed" stroke="#ea580c" stroke-width="1.6"/>
+          <text x="510" y="357" fill="#c2410c" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">SCALED (2 Replicas)</text>
+          <text x="510" y="373" fill="#0f172a" font-size="11.5" font-family="'Geist', sans-serif" font-weight="700">Order Service</text>
+          <text x="510" y="386" fill="#64748b" font-size="8.5" font-family="'Geist Mono', monospace">Port :5004 · State Machine</text>
+          <text x="510" y="399" fill="#ea580c" font-size="8" font-family="'Geist Mono', monospace">Saga Choreographer</text>
+        </g>
+
+        <!-- 5. PAYMENT SERVICE (2 WORKERS - FOCAL NODE) -->
+        <g id="svc-payment">
+          <rect x="655" y="342" width="145" height="66" rx="6" fill="#fff7ed" stroke="#ea580c" stroke-width="1.6"/>
+          <text x="665" y="357" fill="#c2410c" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">WORKERS (2 Replicas)</text>
+          <text x="665" y="373" fill="#0f172a" font-size="11.5" font-family="'Geist', sans-serif" font-weight="700">Payment Service</text>
+          <text x="665" y="386" fill="#64748b" font-size="8.5" font-family="'Geist Mono', monospace">Port :5005 · Txn Engine</text>
+          <text x="665" y="399" fill="#ea580c" font-size="8" font-family="'Geist Mono', monospace">Competing Consumers</text>
+        </g>
+
+        <!-- 6. DELIVERY SERVICE -->
+        <g id="svc-delivery">
+          <rect x="810" y="345" width="130" height="58" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="822" y="364" fill="#0f172a" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Delivery Service</text>
+          <text x="822" y="377" fill="#64748b" font-size="8.5" font-family="'Geist Mono', monospace">Port :5006 · Drivers</text>
+          <text x="822" y="392" fill="#2563eb" font-size="8" font-family="'Geist Mono', monospace">Singleton</text>
+        </g>
+
+        <!-- 7. REVIEW SERVICE -->
+        <g id="svc-review">
+          <rect x="950" y="345" width="125" height="58" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="962" y="364" fill="#0f172a" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Review Service</text>
+          <text x="962" y="377" fill="#64748b" font-size="8.5" font-family="'Geist Mono', monospace">Port :5008 · Ratings</text>
+          <text x="962" y="392" fill="#2563eb" font-size="8" font-family="'Geist Mono', monospace">Singleton</text>
+        </g>
+
+        <!-- 8. NOTIFICATION SERVICE -->
+        <g id="svc-notification">
+          <rect x="1085" y="345" width="115" height="58" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+          <text x="1095" y="364" fill="#0f172a" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Notification Svc</text>
+          <text x="1095" y="377" fill="#64748b" font-size="8.5" font-family="'Geist Mono', monospace">Port :5007 · Alerts</text>
+          <text x="1095" y="392" fill="#2563eb" font-size="8" font-family="'Geist Mono', monospace">Queue Consumer</text>
+        </g>
+
+        <!-- ========================================================================= -->
+        <!-- ASYNC BACKBONE: RABBITMQ & REDIS CACHE -->
+        <!-- ========================================================================= -->
+        <!-- Redis Cache (Under Restaurant Service) -->
+        <g id="node-redis">
+          <rect x="345" y="470" width="145" height="56" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+          <circle cx="362" cy="498" r="5" fill="#d97706"/>
+          <text x="375" y="492" fill="#78350f" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Redis Cache</text>
+          <text x="375" y="506" fill="#92400e" font-size="8.5" font-family="'Geist Mono', monospace">Port :6379 · Menu LRU</text>
+        </g>
+        <!-- Restaurant to Redis connection -->
+        <line x1="417" y1="408" x2="417" y2="470" stroke="#d97706" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arr-coral)"/>
+
+        <!-- RabbitMQ Message Broker (Wide Event Bus) -->
+        <g id="node-rabbitmq">
+          <rect x="500" y="465" width="690" height="66" rx="7" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="515" y="480" width="36" height="36" rx="4" fill="#7c3aed"/>
+          <text x="533" y="503" fill="#ffffff" font-size="12" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">MQ</text>
+          <text x="565" y="492" fill="#581c87" font-size="13" font-family="'Geist', sans-serif" font-weight="700">RabbitMQ Message Broker (Port 5672 | UI: 15672)</text>
+          <text x="565" y="508" fill="#6b21a8" font-size="9.5" font-family="'Geist Mono', monospace">Topic Exchange: 'food_delivery_events' · Queues: order.created · payment.completed · delivery.assigned</text>
+        </g>
+
+        <!-- Event Arrows: Order -> RabbitMQ -->
+        <path d="M 572,408 V 465" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#arr-purple)"/>
+        <text x="578" y="438" fill="#7c3aed" font-size="8" font-family="'Geist Mono', monospace">Pub: OrderCreated</text>
+
+        <!-- Event Arrows: RabbitMQ -> Payment Workers -->
+        <path d="M 685,465 V 408" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#arr-purple)"/>
+        <text x="690" y="438" fill="#7c3aed" font-size="8" font-family="'Geist Mono', monospace">Consume</text>
+
+        <!-- Event Arrows: Payment -> RabbitMQ -->
+        <path d="M 755,408 V 465" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#arr-purple)"/>
+        <text x="760" y="438" fill="#7c3aed" font-size="8" font-family="'Geist Mono', monospace">Pub: PaymentCompleted</text>
+
+        <!-- Event Arrows: RabbitMQ -> Delivery -->
+        <path d="M 875,465 V 403" fill="none" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr-purple)"/>
+        <!-- Event Arrows: RabbitMQ -> Review -->
+        <path d="M 1012,465 V 403" fill="none" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr-purple)"/>
+        <!-- Event Arrows: RabbitMQ -> Notification -->
+        <path d="M 1142,465 V 403" fill="none" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr-purple)"/>
+
+        <!-- ========================================================================= -->
+        <!-- ZONE 4: ISOLATED DATABASE TIER (DATABASE-PER-SERVICE) -->
+        <!-- ========================================================================= -->
+        <rect x="30" y="625" width="1180" height="150" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+        <rect x="50" y="618" width="300" height="15" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8"/>
+        <text x="200" y="629" fill="#047857" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle" letter-spacing="0.1em">4. DATA TIER (DATABASE-PER-SERVICE PATTERN)</text>
+
+        <!-- 1. USER DB (Connected to Auth & User Services as per SRS Image 4) -->
+        <g id="db-user">
+          <rect x="80" y="655" width="180" height="60" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.3"/>
+          <text x="95" y="678" fill="#065f46" font-size="12" font-family="'Geist', sans-serif" font-weight="600">User DB</text>
+          <text x="95" y="694" fill="#047857" font-size="9" font-family="'Geist Mono', monospace">auth_db + user_db (Mongo)</text>
+          <text x="95" y="707" fill="#64748b" font-size="8" font-family="'Geist Mono', monospace">Creds · Addresses · Profiles</text>
+        </g>
+        <!-- Lines from Auth and User to User DB -->
+        <path d="M 125,403 V 595 H 145 V 655" fill="none" stroke="#059669" stroke-width="1.2" marker-end="url(#arr-green)"/>
+        <path d="M 270,403 V 595 H 205 V 655" fill="none" stroke="#059669" stroke-width="1.2" marker-end="url(#arr-green)"/>
+
+        <!-- 2. RESTAURANT DB -->
+        <g id="db-restaurant">
+          <rect x="345" y="655" width="145" height="60" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.3"/>
+          <text x="358" y="678" fill="#065f46" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Restaurant DB</text>
+          <text x="358" y="694" fill="#047857" font-size="9" font-family="'Geist Mono', monospace">restaurant_db</text>
+          <text x="358" y="707" fill="#64748b" font-size="8" font-family="'Geist Mono', monospace">Menus · Items · Categories</text>
+        </g>
+        <line x1="417" y1="526" x2="417" y2="655" stroke="#059669" stroke-width="1.2" marker-end="url(#arr-green)"/>
+
+        <!-- 3. ORDER DB -->
+        <g id="db-order">
+          <rect x="500" y="655" width="145" height="60" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.3"/>
+          <text x="513" y="678" fill="#065f46" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Order DB</text>
+          <text x="513" y="694" fill="#047857" font-size="9" font-family="'Geist Mono', monospace">order_db</text>
+          <text x="513" y="707" fill="#64748b" font-size="8" font-family="'Geist Mono', monospace">Active Orders · Line Items</text>
+        </g>
+        <path d="M 545,531 V 655" fill="none" stroke="#059669" stroke-width="1.2" marker-end="url(#arr-green)"/>
+
+        <!-- 4. PAYMENT DB -->
+        <g id="db-payment">
+          <rect x="655" y="655" width="145" height="60" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.3"/>
+          <text x="668" y="678" fill="#065f46" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Payment DB</text>
+          <text x="668" y="694" fill="#047857" font-size="9" font-family="'Geist Mono', monospace">payment_db</text>
+          <text x="668" y="707" fill="#64748b" font-size="8" font-family="'Geist Mono', monospace">Txn Logs · Receipts</text>
+        </g>
+        <path d="M 727,531 V 655" fill="none" stroke="#059669" stroke-width="1.2" marker-end="url(#arr-green)"/>
+
+        <!-- 5. DELIVERY DB -->
+        <g id="db-delivery">
+          <rect x="810" y="655" width="130" height="60" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.3"/>
+          <text x="822" y="678" fill="#065f46" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Delivery DB</text>
+          <text x="822" y="694" fill="#047857" font-size="9" font-family="'Geist Mono', monospace">delivery_db</text>
+          <text x="822" y="707" fill="#64748b" font-size="8" font-family="'Geist Mono', monospace">Riders · Live Coordinates</text>
+        </g>
+        <path d="M 875,531 V 655" fill="none" stroke="#059669" stroke-width="1.2" marker-end="url(#arr-green)"/>
+
+        <!-- 6. REVIEW DB -->
+        <g id="db-review">
+          <rect x="950" y="655" width="125" height="60" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.3"/>
+          <text x="962" y="678" fill="#065f46" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Review DB</text>
+          <text x="962" y="694" fill="#047857" font-size="9" font-family="'Geist Mono', monospace">review_db</text>
+          <text x="962" y="707" fill="#64748b" font-size="8" font-family="'Geist Mono', monospace">Star Ratings · Feedback</text>
+        </g>
+        <path d="M 1012,531 V 655" fill="none" stroke="#059669" stroke-width="1.2" marker-end="url(#arr-green)"/>
+
+        <!-- Notification No DB indicator -->
+        <g id="db-notif-info">
+          <rect x="1085" y="655" width="115" height="60" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="1095" y="678" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">NO LOCAL DB</text>
+          <text x="1095" y="694" fill="#94a3b8" font-size="8" font-family="'Geist', sans-serif">Stateless Consumer</text>
+          <text x="1095" y="707" fill="#94a3b8" font-size="7.5" font-family="'Geist Mono', monospace">Real-time Push Only</text>
+        </g>
+
+        <!-- Legend Bar at bottom of SVG -->
+        <g transform="translate(50, 805)">
+          <line x1="0" y1="5" x2="25" y2="5" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+          <text x="32" y="9" fill="#475569" font-size="9" font-family="'Geist Mono', monospace">Synchronous REST (North-South)</text>
+
+          <line x1="280" y1="5" x2="305" y2="5" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-purple)"/>
+          <text x="312" y="9" fill="#475569" font-size="9" font-family="'Geist Mono', monospace">Asynchronous Events (RabbitMQ East-West)</text>
+
+          <line x1="640" y1="5" x2="665" y2="5" stroke="#059669" stroke-width="1.5" marker-end="url(#arr-green)"/>
+          <text x="672" y="9" fill="#475569" font-size="9" font-family="'Geist Mono', monospace">Database-per-Service Persistent Link</text>
+
+          <rect x="960" y="-2" width="14" height="14" rx="3" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2"/>
+          <text x="982" y="9" fill="#ea580c" font-size="9" font-family="'Geist Mono', monospace" font-weight="600">Focal Scaled Microservices</text>
+        </g>
+      </svg>
