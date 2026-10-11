@@ -1,7 +1,10 @@
 # Project Documentation Index
+
 **System:** Online Food Delivery System (Microservices Architecture)  
-**Course:** SWE4007 – Software Application Architecture (First Review)  
-**Guide:** Prof. Tauseef Khan  
+**Course:** SWE4007: Software Application Architecture (First Review)  
+**Guide:** Prof. Tauseef Khan · VIT Vellore  
+**Main Project Readme:** [`../README.md`](../README.md)  
+
 **Team Members:**  
 - Krishnakanth (23MIC7004)  
 - Aadith M Mathew (23MIC7005)  
@@ -24,10 +27,5 @@
 | ⚖️ [`phase_4_plan.md`](phase_4_plan.md) | **Phase 4 Execution Plan:** Horizontal Scaling & Resilience (Container Replicas, Load Balancing, Chaos Fault Isolation). |
 | 💻 [`phase_5_plan.md`](phase_5_plan.md) | **Phase 5 Execution Plan:** Customer Web Application (React SPA partitioned into 7 self-contained screen sub-phases). |
 | 🖼️ [`food_delivery_architecture_diagram.png`](food_delivery_architecture_diagram.png) | **High-Resolution Architecture Diagram:** Publication-ready 2x PNG for Word reports and presentation slide decks. |
-
-
-
-
-
 | 📐 [`food_delivery_architecture_diagram.svg`](food_delivery_architecture_diagram.svg) | **Scalable Vector Graphic (SVG):** Infinitely scalable vector diagram. |
 | 🌐 [`food_delivery_architecture_diagram.html`](food_delivery_architecture_diagram.html) | **Interactive Editorial HTML Diagram:** Standalone webpage featuring defense cards, typography, and live-ready design tokens. |
