@@ -63,16 +63,18 @@ async function connect(url) {
       await channel.consume(QUEUE_NAME, async (msg) => {
         if (!msg) return;
 
+        const workerId = process.env.HOSTNAME || 'unknown-worker';
+
         try {
           const content = JSON.parse(msg.content.toString());
-          console.log(`[Payment Service] Received order.created event for Order ${content.orderId} (Amount: ${content.totalAmount})`);
+          console.log(`[Payment Worker: ${workerId}] Received order.created event for Order ${content.orderId} (Amount: ${content.totalAmount})`);
 
           // Idempotency check: see if a transaction already exists for this orderId
           let payment = await Payment.findOne({ orderId: content.orderId });
 
           if (!payment) {
             // Simulate payment authorization delay (~800ms)
-            console.log(`[Payment Service] Simulating payment processing delay (800ms) for Order ${content.orderId}...`);
+            console.log(`[Payment Worker: ${workerId}] Simulating payment processing delay (800ms) for Order ${content.orderId}...`);
             await new Promise((resolve) => setTimeout(resolve, 800));
 
             // Generate unique payment ID
@@ -88,12 +90,13 @@ async function connect(url) {
               amount: content.totalAmount,
               method: content.paymentMethod || 'UPI',
               status: 'SUCCESS',
+              processedBy: workerId,
             });
 
             await payment.save();
-            console.log(`[Payment Service] Payment record persisted: ${payment.paymentId} for Order ${payment.orderId}`);
+            console.log(`[Payment Worker: ${workerId}] Payment record persisted: ${payment.paymentId} for Order ${payment.orderId}`);
           } else {
-            console.log(`[Payment Service] Existing payment record found: ${payment.paymentId} for Order ${payment.orderId}`);
+            console.log(`[Payment Worker: ${workerId}] Existing payment record found: ${payment.paymentId} for Order ${payment.orderId}`);
           }
 
           // Publish payment.completed event
@@ -103,6 +106,7 @@ async function connect(url) {
             userId: payment.userId,
             amount: payment.amount,
             status: payment.status,
+            processedBy: workerId,
           };
 
           channel.publish(
@@ -115,10 +119,10 @@ async function connect(url) {
             }
           );
 
-          console.log(`[Payment Service] Published payment.completed event: ${payment.paymentId} for Order ${payment.orderId}`);
+          console.log(`[Payment Worker: ${workerId}] Published payment.completed event: ${payment.paymentId} for Order ${payment.orderId}`);
           channel.ack(msg);
         } catch (consumeErr) {
-          console.error('[Payment Service] Error processing order.created event:', consumeErr.message);
+          console.error(`[Payment Worker: ${workerId}] Error processing order.created event:`, consumeErr.message);
           channel.ack(msg);
         }
       });

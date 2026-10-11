@@ -134,12 +134,12 @@ Placing an order triggers a complete end-to-end chain: Order $\rightarrow$ Payme
 
 > **Objective:** Verify and demonstrate the architectural features for the review evaluation.
 
-* [ ] **4.1 Scale Services:**
+* [x] **4.1 Scale Services:**
   * Run: `docker compose up --scale restaurant-service=2 --scale order-service=2 --scale payment-service=2`.
-* [ ] **4.2 Verify Load Balancing:**
+* [x] **4.2 Verify Load Balancing:**
   * Send consecutive requests to `GET /api/restaurants` and `POST /api/orders`.
   * Confirm that consecutive responses return different container hostnames (`process.env.HOSTNAME`).
-* [ ] **4.3 Fault Tolerance Test (Live Chaos Demo):**
+* [x] **4.3 Fault Tolerance Test (Live Chaos Demo):**
   * Intentionally stop the Notification Service container: `docker stop notification-service`.
   * Place an order: verify that Order, Payment, and Delivery still succeed flawlessly without breaking the app.
 

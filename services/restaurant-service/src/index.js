@@ -16,6 +16,12 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+// Instance Tracking Middleware
+app.use((req, res, next) => {
+  res.setHeader('X-Served-By', process.env.HOSTNAME || 'unknown');
+  next();
+});
+
 // Redis Client Setup
 const redis = new Redis(REDIS_URL, {
   retryStrategy(times) {
@@ -264,6 +270,7 @@ router.get('/health', async (req, res) => {
     service: 'restaurant-service',
     database: mongoStatus,
     cache: redisStatus,
+    servedBy: process.env.HOSTNAME || 'unknown',
     timestamp: new Date().toISOString(),
   });
 });
@@ -280,7 +287,11 @@ router.get('/', async (req, res) => {
     const cached = await redis.get(cacheKey);
     if (cached) {
       res.set('X-Cache', 'HIT');
-      return res.status(200).json(JSON.parse(cached));
+      const cachedData = JSON.parse(cached);
+      return res.status(200).json({
+        servedBy: process.env.HOSTNAME || 'unknown',
+        restaurants: Array.isArray(cachedData) ? cachedData : (cachedData.restaurants || []),
+      });
     }
   } catch (cacheErr) {
     console.warn('[Restaurant Service] Cache read error, falling back to DB:', cacheErr.message);
@@ -309,7 +320,10 @@ router.get('/', async (req, res) => {
     }
 
     res.set('X-Cache', 'MISS');
-    return res.status(200).json(restaurants);
+    return res.status(200).json({
+      servedBy: process.env.HOSTNAME || 'unknown',
+      restaurants,
+    });
   } catch (dbErr) {
     console.error('[Restaurant Service] Database query error:', dbErr);
     return res.status(500).json({
@@ -335,7 +349,11 @@ router.get('/:id', async (req, res) => {
       });
     }
 
-    return res.status(200).json(restaurant);
+    const restaurantObj = restaurant.toObject ? restaurant.toObject() : restaurant;
+    return res.status(200).json({
+      ...restaurantObj,
+      servedBy: process.env.HOSTNAME || 'unknown',
+    });
   } catch (err) {
     console.error('[Restaurant Service] Get restaurant error:', err);
     return res.status(500).json({

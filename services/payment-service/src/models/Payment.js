@@ -33,6 +33,10 @@ const paymentSchema = new mongoose.Schema(
       default: 'SUCCESS',
       index: true,
     },
+    processedBy: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

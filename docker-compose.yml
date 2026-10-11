@@ -93,10 +93,9 @@ services:
 
   restaurant-service:
     build: ./services/restaurant-service
-    container_name: restaurant-service
     restart: unless-stopped
-    ports:
-      - "5003:5003"
+    expose:
+      - "5003"
     environment:
       - PORT=5003
       - MONGO_URI=mongodb://mongodb:27017/restaurant_db
@@ -117,10 +116,9 @@ services:
 
   order-service:
     build: ./services/order-service
-    container_name: order-service
     restart: unless-stopped
-    ports:
-      - "5004:5004"
+    expose:
+      - "5004"
     environment:
       - PORT=5004
       - MONGO_URI=mongodb://mongodb:27017/order_db
@@ -141,10 +139,9 @@ services:
 
   payment-service:
     build: ./services/payment-service
-    container_name: payment-service
     restart: unless-stopped
-    ports:
-      - "5005:5005"
+    expose:
+      - "5005"
     environment:
       - PORT=5005
       - MONGO_URI=mongodb://mongodb:27017/payment_db

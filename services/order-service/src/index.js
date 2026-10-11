@@ -15,6 +15,12 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+// Instance Tracking Middleware
+app.use((req, res, next) => {
+  res.setHeader('X-Served-By', process.env.HOSTNAME || 'unknown');
+  next();
+});
+
 // Helper to generate Unique Order ID (e.g. ORD-849201)
 function generateOrderId() {
   return `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -33,6 +39,7 @@ router.get('/health', (req, res) => {
     service: 'order-service',
     database: dbStatus,
     rabbitmq: rabbitmqStatus,
+    servedBy: process.env.HOSTNAME || 'unknown',
     timestamp: new Date().toISOString(),
   });
 });
@@ -119,6 +126,7 @@ router.post('/', async (req, res) => {
       deliveryAddress: order.deliveryAddress,
       paymentId: order.paymentId,
       createdAt: order.createdAt,
+      servedBy: process.env.HOSTNAME || 'unknown',
     });
   } catch (err) {
     console.error('[Order Service] Create order error:', err);
@@ -161,7 +169,11 @@ router.get('/:id', async (req, res) => {
       });
     }
 
-    return res.status(200).json(order);
+    const orderObj = order.toObject ? order.toObject() : order;
+    return res.status(200).json({
+      ...orderObj,
+      servedBy: process.env.HOSTNAME || 'unknown',
+    });
   } catch (err) {
     console.error('[Order Service] Get order error:', err);
     return res.status(500).json({

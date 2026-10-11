@@ -15,6 +15,12 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+// Instance Tracking Middleware
+app.use((req, res, next) => {
+  res.setHeader('X-Served-By', process.env.HOSTNAME || 'unknown');
+  next();
+});
+
 // Router Definition
 const router = express.Router();
 
@@ -28,6 +34,7 @@ router.get('/health', (req, res) => {
     service: 'payment-service',
     database: dbStatus,
     rabbitmq: rabbitmqStatus,
+    servedBy: process.env.HOSTNAME || 'unknown',
     timestamp: new Date().toISOString(),
   });
 });
@@ -45,7 +52,11 @@ router.get('/transaction/:orderId', async (req, res) => {
       });
     }
 
-    return res.status(200).json(payment);
+    const paymentObj = payment.toObject ? payment.toObject() : payment;
+    return res.status(200).json({
+      ...paymentObj,
+      servedBy: process.env.HOSTNAME || 'unknown',
+    });
   } catch (err) {
     console.error('[Payment Service] Get transaction error:', err);
     return res.status(500).json({
@@ -71,7 +82,11 @@ router.get('/:paymentId', async (req, res) => {
       });
     }
 
-    return res.status(200).json(payment);
+    const paymentObj = payment.toObject ? payment.toObject() : payment;
+    return res.status(200).json({
+      ...paymentObj,
+      servedBy: process.env.HOSTNAME || 'unknown',
+    });
   } catch (err) {
     console.error('[Payment Service] Get payment by ID error:', err);
     return res.status(500).json({
