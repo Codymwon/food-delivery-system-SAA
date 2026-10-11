@@ -22,7 +22,9 @@
 | 💳 [`phase_2_plan.md`](phase_2_plan.md) | **Phase 2 Execution Plan:** Core Transaction Engine (Order Service & Payment Service via RabbitMQ Saga Choreography). |
 | 🛵 [`phase_3_plan.md`](phase_3_plan.md) | **Phase 3 Execution Plan:** Fulfillment & Auxiliary Services (Delivery Service, Notification Service, Review Service). |
 | ⚖️ [`phase_4_plan.md`](phase_4_plan.md) | **Phase 4 Execution Plan:** Horizontal Scaling & Resilience (Container Replicas, Load Balancing, Chaos Fault Isolation). |
+| 💻 [`phase_5_plan.md`](phase_5_plan.md) | **Phase 5 Execution Plan:** Customer Web Application (React SPA partitioned into 7 self-contained screen sub-phases). |
 | 🖼️ [`food_delivery_architecture_diagram.png`](food_delivery_architecture_diagram.png) | **High-Resolution Architecture Diagram:** Publication-ready 2x PNG for Word reports and presentation slide decks. |
+
 
 
 
